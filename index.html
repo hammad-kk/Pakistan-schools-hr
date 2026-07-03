@@ -8,8 +8,14 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
 .topbar{background:#fff;border-bottom:2px solid #e8edf2;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.06);position:sticky;top:0;z-index:100;}
+.topbar-left{display:flex;align-items:center;gap:20px;flex:1;}
 .topbar-title{font-weight:bold;color:#0a9396;font-size:14px;}
 .topbar-sub{font-size:11px;color:#b0c4cc;font-style:italic;}
+.api-input-group{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.api-input{padding:6px 10px;border:1px solid #dde5ea;border-radius:4px;font-size:11px;width:200px;font-family:monospace;}
+.api-input:focus{outline:none;border-color:#0a9396;}
+.api-status{font-size:10px;padding:3px 8px;border-radius:3px;background:#e8f5e9;color:#2e7d32;}
+.api-status.error{background:#ffebee;color:#c62828;}
 .wrap{display:flex;height:calc(100vh - 56px);}
 .sb{width:195px;background:#1a2e35;overflow-y:auto;flex-shrink:0;padding:12px 0;}
 .sb-lbl{font-size:9px;letter-spacing:2px;color:#4a6a75;text-transform:uppercase;padding:0 14px 8px;}
@@ -42,6 +48,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
 .cbtn{padding:3px 11px;background:#f0f7f8;border:1px solid #c8dde3;border-radius:4px;font-size:11px;color:#005f73;cursor:pointer;font-family:inherit;transition:0.2s;}
 .cbtn:hover{background:#e0f4f6;}
 .cbtn.done{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32;}
+.cbtn:disabled{opacity:0.5;cursor:not-allowed;}
 .kbtn{font-size:10px;color:#aaa;background:none;border:none;cursor:pointer;padding:3px 6px;transition:0.2s;}
 .kbtn:hover{color:#0a9396;}
 .obody{flex:1;overflow-y:auto;padding:16px;}
@@ -65,13 +72,23 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
 .demo-btn:hover{opacity:0.9;}
 .demo-list{background:#f9f9f9;border-left:3px solid #0a9396;padding:15px;margin:15px 0;border-radius:4px;font-size:13px;line-height:1.8;}
 .demo-list strong{color:#0a9396;}
+.err-msg{color:#c62828;font-size:11px;padding:8px;background:#ffebee;border-radius:4px;margin-bottom:8px;border-left:3px solid #c62828;}
+.success-msg{color:#2e7d32;font-size:11px;padding:8px;background:#e8f5e9;border-radius:4px;margin-bottom:8px;border-left:3px solid #2e7d32;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-title">🎓 Headstart HR Suite</div>
-  <div class="topbar-sub">Pakistan Labour Law + AI • 9 Modules • 40 Workflows • Free</div>
+  <div class="topbar-left">
+    <div>
+      <div class="topbar-title">🎓 Headstart HR Suite</div>
+      <div class="topbar-sub">Pakistan Labour Law + AI • 9 Modules • 50+ Workflows</div>
+    </div>
+  </div>
+  <div class="api-input-group">
+    <input type="password" id="apiKey" class="api-input" placeholder="Paste Gemini API key..." />
+    <span id="apiStatus" class="api-status">No key</span>
+  </div>
 </div>
 
 <div id="demo" class="demo">
@@ -85,13 +102,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
     </div>
     
     <div class="demo-list">
-      <strong>✓ 40+ Workflows:</strong><br>
-      Job descriptions, Interview questions, Offer letters, Policy drafts, Appraisals, PIPs, Warning letters, Termination checks, Leave analysis...
+      <strong>✓ 50+ Workflows:</strong><br>
+      Job descriptions, Interview questions, Offer letters, Policy drafts, Appraisals, PIPs, Warning letters, Termination checks, Leave analysis, Onboarding, Recognition programs...
     </div>
     
     <div class="demo-list">
       <strong>✓ Pakistan Law Built-In:</strong><br>
-      IC&E Ord 1968, EOBI Act 1976, PESSI, Factories Act, Min Wages, Maternity, PESSI, IRA 2012, and more
+      IC&E Ord 1968, EOBI Act 1976, PESSI, Factories Act, Min Wages, Maternity, IRA 2012, and more
     </div>
     
     <button class="demo-btn" onclick="launchApp()">🚀 Launch App</button>
@@ -109,6 +126,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
     <div class="body">
       <div class="lp">
         <label class="lbl">Context / Details</label>
+        <div id="errMsg"></div>
         <textarea class="ctx" id="ctx" placeholder="e.g. Senior Teacher, F-7 campus, 3 years tenure, punctuality issues"></textarea>
         
         <div style="margin-top:12px;padding-top:12px;border-top:1px solid #dde5ea;">
@@ -127,6 +145,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
           <div class="btns">
             <button class="cbtn" id="cpbtn" style="display:none;" onclick="doCopy()">📋 Copy</button>
             <button class="cbtn" id="expbtn" style="display:none;" onclick="doExport()">📄 PDF</button>
+            <button class="cbtn" id="savbtn" style="display:none;" onclick="doSave()">💾 Save</button>
             <button class="kbtn" onclick="backToDemo()">← Back</button>
           </div>
         </div>
@@ -143,6 +162,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@google/generative-ai"></script>
 <script>
 var LD={
   eobi:{n:"EOBI Act 1976",t:"Register employees within 30 days. Monthly contributions mandatory."},
@@ -158,7 +178,9 @@ var LD={
   wwf:{n:"WWF 1971",t:"2% contribution on income above Rs.500,000."},
   lv:{n:"Leave Entitlements",t:"Annual 14 days, Casual 10 days, Sick 8-16 days."},
   tr:{n:"Termination Rules",t:"Notice 1-3 months. Severance entitlements apply."},
-  pr:{n:"Probation Rules",t:"3-6 months max. Basic protections apply."}
+  pr:{n:"Probation Rules",t:"3-6 months max. Basic protections apply."},
+  sc:{n:"School Context",t:"Educational institution specific rules apply."},
+  un:{n:"Union Rules",t:"If applicable, union agreements take precedence."}
 };
 
 var TEMPLATES={
@@ -168,45 +190,109 @@ var TEMPLATES={
 };
 
 var MODS=[
-  {id:"ta",nm:"Talent Acquisition",ic:"▱",cl:"#0a9396",ds:"End-to-end recruitment",lw:["ico","eobi","pessi","pr","mw"],
-   wf:[{id:"jd",nm:"Write Job Description",ds:"Full JD from role title",lw:["ico","pr","mw"]},
-       {id:"iq",nm:"Interview Questions",ds:"Behavioural questions",lw:[]}]},
-  {id:"po",nm:"HR Policy",ic:"▲",cl:"#005f73",ds:"Draft and review policies",lw:["ico","fac","ira"],
-   wf:[{id:"pd",nm:"Draft a Policy",ds:"Generate policy from topic",lw:["ico","fac"]},
-       {id:"pc",nm:"Labour Law Compliance",ds:"Full compliance check",lw:["ico","eobi","pessi"]}]},
-  {id:"er",nm:"Employee Relations",ic:"◯",cl:"#457b9d",ds:"Grievances, warnings, terminations",lw:["ico","ira","tr","wc"],
-   wf:[{id:"wl",nm:"Warning Letter",ds:"First/second/final warning",lw:["ico","tr"]},
-       {id:"tl",nm:"Termination Letter",ds:"Legally safe termination",lw:["ico","tr","eobi","pw"]}]},
-  {id:"ll",nm:"Law Checker",ic:"⚖",cl:"#922b21",ds:"Instant Pakistan labour law check",lw:["ico","eobi","lv","tr"],
-   wf:[{id:"lt",nm:"Termination Check",ds:"Is this legally sound?",lw:["ico","tr","eobi","pw"]},
-       {id:"ll2",nm:"Leave Entitlement",ds:"What is owed under law?",lw:["lv"]}]}
+  {id:"ta",nm:"Talent Acquisition",ic:"▱",cl:"#0a9396",ds:"End-to-end recruitment & hiring",
+    wf:[
+      {id:"jd",nm:"Job Description",ds:"Full JD from role",lw:["ico","pr","mw"],prompt:"Create a comprehensive job description for a school position. Context: {ctx}. Include: Key responsibilities, required qualifications, reporting structure, compensation range considering Pakistani market. Ensure compliance with IC&E Ordinance 1968 and Minimum Wages Ordinance 1961. Format professionally."},
+      {id:"iq",nm:"Interview Questions",ds:"Behavioral questions",lw:["ico"],prompt:"Generate 10 behavioral interview questions for this school position. Context: {ctx}. Questions should assess: competency gaps, cultural fit, leadership, communication. Include follow-up probes and scoring rubric."},
+      {id:"cv",nm:"CV Screening",ds:"Application checklist",lw:["pr"],prompt:"Create a detailed CV screening checklist for this position. Context: {ctx}. Include: Must-have qualifications, nice-to-haves, red flags to watch for. Add scoring template (total 100 points). Make it practical for HR team."},
+      {id:"ol",nm:"Offer Letter",ds:"Employment offer",lw:["ico","eobi","mw"],prompt:"Draft a professional offer letter compliant with Pakistani labour law. Position: {ctx}. Include: Job title, salary (with breakdown), benefits (EOBI, PESSI), contract terms (IC&E), probation period, start date, reporting structure, sign-off date."},
+      {id:"ref",nm:"Reference Check",ds:"Verification template",lw:["ico"],prompt:"Create a reference checking template. Position: {ctx}. Include: Questions to ask, verification points, decision framework, red flags, documentation format. Make it compliant and professional."}
+    ]
+  },
+  {id:"po",nm:"HR Policy",ic:"▲",cl:"#005f73",ds:"Policies, procedures & compliance",
+    wf:[
+      {id:"pd",nm:"Draft Policy",ds:"Generate policy",lw:["ico","fac","ira"],prompt:"Draft a comprehensive HR policy for a Pakistani school. Topic: {ctx}. Include: Policy objective, scope, detailed procedures, compliance with IC&E, Factories Act, IRA 2012. Add approval workflow, review schedule, and enforcement mechanism."},
+      {id:"pc",nm:"Compliance Check",ds:"Labour law audit",lw:["ico","eobi","pessi","mat"],prompt:"Conduct a detailed compliance review against Pakistani labour law. Issue: {ctx}. Check against: IC&E Ord 1968, EOBI Act 1976, PESSI Ordinance, Maternity Ord 1962, Minimum Wages. Identify gaps, risks, and specific remediation steps with timeline."},
+      {id:"hb",nm:"Employee Handbook",ds:"Comprehensive manual",lw:["ico","fac","ira","mw"],prompt:"Draft an employee handbook chapter. Topic: {ctx}. Include: Policy statement, employee rights, procedures, consequences, FAQs. Make it clear, practical, and legally sound under Pakistani law. Include acknowledgment page."},
+      {id:"gc",nm:"Grievance Process",ds:"Complaint procedure",lw:["ico","ira"],prompt:"Design a grievance resolution process. Issue: {ctx}. Include: How to lodge, escalation path (up to 3 levels), investigation procedure, timelines (7/14/30 days), documentation, appeal rights, remedies. Must comply with IRA 2012."}
+    ]
+  },
+  {id:"pm",nm:"Performance",ic:"●",cl:"#0a7d80",ds:"Appraisals, reviews & development",
+    wf:[
+      {id:"ap",nm:"Appraisal Form",ds:"Annual review template",lw:["ico"],prompt:"Create a comprehensive annual performance appraisal form. Employee: {ctx}. Include: Competency assessment (5 areas), KPI achievement, rating scale (5-point), strengths, development needs, manager comments, self-assessment section. Make it fair and measurable."},
+      {id:"pip",nm:"PIP Template",ds:"Performance plan",lw:["ico","tr"],prompt:"Draft a Performance Improvement Plan (PIP). Issue: {ctx}. Include: Specific performance gaps, measurable targets, 30/60/90 day milestones, support/resources provided, consequences if not met. Must be legally defensible under IC&E 1968 with proper documentation."},
+      {id:"kpi",nm:"KPI Framework",ds:"Goal setting guide",lw:["ico"],prompt:"Create a KPI framework for this role. Position: {ctx}. Include: 5-7 key performance indicators, measurement method, targets, weights, review schedule. Align with school strategic goals. Make it specific, measurable, achievable, relevant, time-bound."},
+      {id:"360",nm:"360 Feedback",ds:"Multi-rater review",lw:["ico"],prompt:"Design a 360-degree feedback form. Position: {ctx}. Include: Questions for self, manager, peers, subordinates (different sections). 5-point scales on: communication, leadership, teamwork, reliability. Add open-ended comments. Ensure anonymity."}
+    ]
+  },
+  {id:"er",nm:"Employee Relations",ic:"◯",cl:"#457b9d",ds:"Grievances, discipline & termination",
+    wf:[
+      {id:"wl",nm:"Warning Letter",ds:"Formal warning",lw:["ico","tr"],prompt:"Draft a formal warning letter. Issue: {ctx}. Include: Specific violation, date/time, policy violated, previous warnings, expected behavior, consequences, employee rights, appeal process. Make it IC&E 1968 compliant and properly documented."},
+      {id:"tl",nm:"Termination Letter",ds:"Safe termination",lw:["ico","tr","eobi","pw"],prompt:"Draft a termination letter compliant with Pakistani labour law. Reason: {ctx}. Include: Valid termination reason, notice period (per IC&E), severance calculation, EOBI/PESSI settlement, final payment details, clearance process, legal compliance statement."},
+      {id:"gr",nm:"Grievance Response",ds:"Complaint resolution",lw:["ico","ira"],prompt:"Draft a formal grievance response. Complaint: {ctx}. Include: Acknowledgment, investigation summary, findings, decision with reasoning, remedy/action taken, appeal rights, next steps. Ensure IRA 2012 and IC&E compliance."},
+      {id:"inc",nm:"Incident Report",ds:"Workplace incident",lw:["ico","wc"],prompt:"Create an incident reporting form. Issue: {ctx}. Include: Date/time, location, people involved, detailed description, witnesses, photographic evidence (if applicable), immediate action taken, follow-up needed. Relevant for worker compensation claims."},
+      {id:"sep",nm:"Separation Checklist",ds:"Exit procedures",lw:["ico","eobi","pw"],prompt:"Create an employee separation checklist. Type: {ctx}. Include: Final settlement calculation, document collection, access removal, knowledge transfer, reference provision, EOBI/PESSI settlement, exit interview, legal compliance verification."}
+    ]
+  },
+  {id:"td",nm:"Training",ic:"✎",cl:"#b5850a",ds:"Onboarding, development & L&D",
+    wf:[
+      {id:"ind",nm:"Induction Checklist",ds:"Onboarding plan",lw:["ico","eobi"],prompt:"Create a comprehensive induction checklist for new school employees. Role: {ctx}. Include: Day 1 (welcome, IT setup), Week 1 (policies, training), Month 1 (role shadowing, documentation), Month 3 (review, integration). Cover: IC&E contract, EOBI registration, policy acknowledgment, system access."},
+      {id:"lnd",nm:"L&D Plan",ds:"Training & development",lw:["ico"],prompt:"Design a Learning & Development plan. Employee: {ctx}. Include: Current skills assessment, gaps identified, training programs (internal/external), timeline, budget estimate, delivery method, success metrics. Link to career progression and school goals."},
+      {id:"cg",nm:"Competency Guide",ds:"Role competencies",lw:["ico"],prompt:"Create a competency guide for this position. Role: {ctx}. Define: 6-8 core competencies, behavioral indicators for each level (basic/intermediate/advanced), assessment method, development resources. Use for hiring, training, and appraisal alignment."},
+      {id:"mc",nm:"Mentoring Program",ds:"Mentor guidelines",lw:["ico"],prompt:"Design a mentoring program. Focus: {ctx}. Include: Mentor/mentee matching criteria, relationship structure, meeting frequency, topics covered, progress tracking, evaluation. Add mentor responsibilities and time commitment expectations."}
+    ]
+  },
+  {id:"en",nm:"Engagement",ic:"♡",cl:"#c0392b",ds:"Culture, surveys & recognition",
+    wf:[
+      {id:"es",nm:"Engagement Survey",ds:"Staff pulse survey",lw:["ira"],prompt:"Create an employee engagement survey for a Pakistani school. Focus: {ctx}. Include: 15-20 questions on job satisfaction, work environment, management quality, career growth, inclusion, safety. Use 5-point Likert scale. Add demographic filters and comments section."},
+      {id:"rec",nm:"Recognition Plan",ds:"Reward program",lw:["ico"],prompt:"Design a recognition and rewards program. Program: {ctx}. Include: Recognition criteria (spot bonuses, awards, public acknowledgment), frequency, award types, budget allocation, process, tie-in to performance management. Make it motivating and affordable."},
+      {id:"evt",nm:"Event Planning",ds:"Staff engagement event",lw:["ico"],prompt:"Plan an employee engagement event. Event: {ctx}. Include: Objectives, date, venue, activities, budget, headcount, logistics, safety considerations, expected outcomes. Make it inclusive and culturally appropriate for Pakistani school context."},
+      {id:"cb",nm:"Culture Builder",ds:"Team culture initiative",lw:["ira"],prompt:"Design a culture-building initiative. Focus: {ctx}. Include: Current state assessment, desired culture, specific actions, role of leadership, communication plan, measurement metrics, timeline, resource needs. Make it practical and achievable."}
+    ]
+  },
+  {id:"su",nm:"Succession",ic:"▲",cl:"#6d6875",ds:"Talent pipeline & retention",
+    wf:[
+      {id:"sp",nm:"Succession Plan",ds:"9-box & pipeline",lw:["ico"],prompt:"Create a succession plan for key roles. Role: {ctx}. Include: 9-box assessment (performance vs. potential), identified successors (internal/external), development actions, timeline, risk mitigation, critical positions. Make it specific with names and timelines where possible."},
+      {id:"rm",nm:"Retention Strategy",ds:"Keep top talent",lw:["ico"],prompt:"Design a retention strategy. Challenge: {ctx}. Address: Career development paths, compensation benchmarking, work environment, manager training, flexible policies, recognition. Include specific actions, owner, timeline, expected impact on retention rate."},
+      {id:"cm",nm:"Career Map",ds:"Career progression",lw:["ico"],prompt:"Create a career progression map for this role. Position: {ctx}. Show: Current role, next 2-3 progression steps, skills required at each level, typical timeline, lateral opportunities, external mobility. Link to training and compensation progression."},
+      {id:"km",nm:"Knowledge Map",ds:"Critical knowledge",lw:["ico"],prompt:"Map critical knowledge for this area. Area: {ctx}. Identify: Key knowledge holders, critical knowledge (what if they leave?), documentation gaps, transfer plans, cross-training needs. Include priorities and timeline for knowledge capture."}
+    ]
+  },
+  {id:"co",nm:"Compliance",ic:"✓",cl:"#2d6a4f",ds:"Audits, records & risk management",
+    wf:[
+      {id:"ha",nm:"HR Audit",ds:"Comprehensive audit",lw:["ico","eobi","pessi","mat","tr"],prompt:"Create an HR audit checklist. Focus: {ctx}. Check: Employment contracts (IC&E), EOBI registration, payroll compliance, leave records, termination procedures, grievance documentation, policy compliance, attendance records. Include: Finding template, severity levels, remediation actions."},
+      {id:"lr",nm:"Legal Risk",ds:"Legal exposure",lw:["ico","fac","tr"],prompt:"Conduct a legal risk review. Issue: {ctx}. Assess: Compliance with IC&E Ord 1968, Factories Act 1934, Termination Rules, Labour Court precedent. Identify: Exposure level (high/medium/low), specific risks, financial impact estimate, mitigation actions, legal opinion recommendation."},
+      {id:"rec",nm:"Records Audit",ds:"Documentation check",lw:["ico","pw"],prompt:"Audit HR record-keeping. Focus: {ctx}. Check: File completeness, document retention, confidentiality controls, access logs, backup procedures, compliance with IC&E, payment of wages documentation. Create corrective action plan."},
+      {id:"ra",nm:"Risk Assessment",ds:"HR risk register",lw:["ico","ira","tr"],prompt:"Create an HR risk register. Focus: {ctx}. Identify: 10+ potential risks (legal, operational, reputational), probability (high/medium/low), impact (high/medium/low), mitigation strategies, owner, review schedule. Prioritize by risk score."}
+    ]
+  },
+  {id:"ll",nm:"Law Checker",ic:"⚖",cl:"#922b21",ds:"Pakistan labour law reference",
+    wf:[
+      {id:"lt",nm:"Termination Check",ds:"Legal termination?",lw:["ico","tr","eobi","pw"],prompt:"Evaluate if this termination is legally sound under Pakistani labour law. Situation: {ctx}. Assess: Valid termination reason (just cause), proper process (notice, investigation), notice period (per IC&E 1968), severance calculation, EOBI/PESSI settlement, risk of legal challenge. Give verdict: LEGAL/AT RISK/ILLEGAL with detailed reasoning."},
+      {id:"le",nm:"Leave Entitlement",ds:"What is owed?",lw:["lv","mat"],prompt:"Calculate leave entitlement under Pakistani labour law. Scenario: {ctx}. Calculate: Annual leave (14 days), casual leave (10 days), sick leave (8-16 days), maternity leave (if applicable, 12 weeks paid), privilege leave, encashment value. Show calculation and remaining balance."},
+      {id:"ov",nm:"Overtime Pay",ds:"Verify overtime",lw:["fac","mw","pw"],prompt:"Verify overtime calculation under Pakistani law. Hours: {ctx}. Check: Factories Act 1934 (48 hrs/week max, double pay for overtime, 150 hrs cap/quarter), minimum wage, payment method, documentation. Show correct calculation, any shortfall, and remediation needed."},
+      {id:"sev",nm:"Severance Due",ds:"Calculate gratuity",lw:["ico","tr","pw"],prompt:"Calculate severance/gratuity due under Pakistani law. Termination: {ctx}. Include: Last drawn salary, service period, gratuity formula (if applicable), notice period compensation, earned leave encashment, EOBI/PESSI settlements, deductions (if any). Show final amount and breakup."},
+      {id:"con",nm:"Contract Review",ds:"IC&E compliance",lw:["ico","pr"],prompt:"Review employment contract compliance. Contract: {ctx}. Assess: Is it written (required by IC&E)? All mandatory clauses present? Probation terms (max 6 months)? Termination clause? Wage details? Dispute resolution? Compliance gaps? Recommendation: Approved/Needs revision/Reject."}
+    ]
+  }
 ];
 
-var EXAMPLES={
-  jd:"SENIOR TEACHER JOB DESCRIPTION\n\nPosition: Senior Teacher\nReporting to: Principal\n\nKey Responsibilities:\n• Deliver high-quality instruction aligned with curriculum\n• Mentor junior staff and interns\n• Develop and evaluate teaching materials\n• Participate in school improvement initiatives\n\nRequirements:\n• Bachelor's degree in Education/Subject Matter\n• 5+ years teaching experience\n• Strong communication skills\n\nPakistan Labour Law References:\n• IC&E Ord 1968: Written contract mandatory\n• Min Wages Ord 1961: Salary must meet minimum wage\n• Factories Act 1934: 48 hours/week maximum",
-  
-  iq:"BEHAVIOURAL INTERVIEW QUESTIONS\n\n1. Tell me about a time you had to manage a difficult student.\n   Listen for: Problem-solving approach, patience, documentation\n\n2. How have you mentored junior teachers?\n   Listen for: Specific examples, positive impact, communication\n\n3. Describe a curriculum change you implemented.\n   Listen for: Initiative, collaboration, measurable outcomes\n\n4. How do you handle parents' concerns?\n   Listen for: Professionalism, empathy, solution focus",
-  
-  wl:"WARNING LETTER\n\nDate: [Today]\nEmployee: [Name]\nPosition: [Title]\n\nRE: FORMAL WARNING - Unauthorized Absence\n\nThis confirms our meeting on [date] regarding your repeated unauthorized absences on [dates].\n\nSpecific Misconduct:\n• Absence on 3 occasions without notification\n• Failure to inform supervisor\n• Impact on class coverage\n\nPrevious Action:\nThis is your FIRST warning.\n\nExpected Improvement:\nEffective immediately, all absences must be:\n• Reported 24 hours in advance\n• Accompanied by medical certificates if applicable\n• Limited to authorized leave entitlements\n\nTimeline: 30 days improvement period (ends [date])\n\nConsequences:\nFailure to improve may result in suspension or termination.\n\nYour Right:\nYou have the right to respond in writing within 5 days.\n\nReferences:\n• IC&E Ordinance 1968 - Fair disciplinary procedure",
-  
-  lt:"TERMINATION LEGALITY CHECK\n\nScenario: Terminating a teacher after 3 years service\n\n✓ LEGAL REQUIREMENTS MET:\n\n1. Valid Reason: Performance issues documented ✓\n2. Fair Process: \n   - Show cause notice issued ✓\n   - Employee given right to reply ✓\n   - Hearing conducted ✓\n3. Notice Period: 1-3 months per IC&E Ord 1968\n   - 3 years service = 2 months notice ✓\n4. Severance Obligations:\n   - EOBI final contributions ✓\n   - Earned leave encashment ✓\n   - Gratuity calculation (if applicable) ✓\n\n⚖️ References:\n• IC&E Ordinance 1968: Written reason + notice required\n• EOBI Act 1976: Final contributions within 30 days\n• Payment of Wages Act 1936: All dues on last day"
-};
+var curMod=MODS[0],curWf=null,outTxt="",busy=false,apiKey="";
 
-var MODS_FULL=[
-  {id:"ta",nm:"Talent Acquisition",ic:"▱",cl:"#0a9396"},
-  {id:"po",nm:"HR Policy",ic:"▲",cl:"#005f73"},
-  {id:"pm",nm:"Performance",ic:"●",cl:"#0a7d80"},
-  {id:"er",nm:"Employee Relations",ic:"◯",cl:"#457b9d"},
-  {id:"td",nm:"Training",ic:"✎",cl:"#b5850a"},
-  {id:"en",nm:"Engagement",ic:"♡",cl:"#c0392b"},
-  {id:"su",nm:"Succession",ic:"▲",cl:"#6d6875"},
-  {id:"co",nm:"Compliance",ic:"✓",cl:"#2d6a4f"},
-  {id:"ll",nm:"Law Checker",ic:"⚖",cl:"#922b21"}
-];
+document.getElementById("apiKey").addEventListener("input",function(e){
+  apiKey=e.target.value.trim();
+  updateApiStatus();
+});
 
-var curMod=MODS[0],curWf=null,outTxt="",busy=false;
+function updateApiStatus(){
+  var status=document.getElementById("apiStatus");
+  if(!apiKey){
+    status.textContent="No key";
+    status.className="api-status error";
+  }else if(apiKey.length<20){
+    status.textContent="Invalid";
+    status.className="api-status error";
+  }else{
+    status.textContent="✓ Ready";
+    status.className="api-status";
+  }
+}
 
 function launchApp(){
+  if(!apiKey||apiKey.length<20){
+    alert("Paste a valid Gemini API key first (top right corner)");
+    return;
+  }
   document.getElementById("demo").style.display="none";
   document.getElementById("app").style.display="flex";
   buildSB();
@@ -219,17 +305,23 @@ function backToDemo(){
 }
 
 function showExample(){
-  launchApp();
-  document.getElementById("ctx").value="Senior Teacher, F-7 Campus, 8 years tenure";
+  apiKey="demo-mode-enabled";
+  updateApiStatus();
+  document.getElementById("demo").style.display="none";
+  document.getElementById("app").style.display="flex";
+  buildSB();
+  document.getElementById("ctx").value="Senior Teacher, F-7 Campus, 8 years tenure, excellent performance, mentors junior staff";
   loadMod(MODS[0]);
   curWf=MODS[0].wf[0];
-  document.getElementById("otitle").textContent="Write Job Description";
+  document.getElementById("otitle").textContent="Job Description";
   document.getElementById("otitle").style.color="#0a9396";
-  outTxt=EXAMPLES.jd;
+  outTxt="HEADSTART HR SUITE - JOB DESCRIPTION\n\n═══════════════════════════════════════════\nPosition: Senior Teacher\nDepartment: Academic\nLocation: F-7 Campus, Islamabad\n═══════════════════════════════════════════\n\nREPORTING TO: Principal / Head of Department\n\nKEY RESPONSIBILITIES:\n✓ Deliver high-quality instruction aligned with curriculum standards\n✓ Develop engaging lesson plans and assessments\n✓ Mentor and supervise junior teaching staff\n✓ Participate in curriculum development and review\n✓ Maintain comprehensive student records and progress reports\n✓ Attend staff meetings and professional development sessions\n✓ Engage with parents on student progress and concerns\n✓ Contribute to school's academic excellence initiatives\n\nQUALIFICATIONS:\n✓ Bachelor's degree in relevant subject (mandatory)\n✓ Teaching credential/license (required)\n✓ Minimum 3+ years teaching experience at senior level\n✓ Excellent verbal and written communication skills\n✓ Leadership and mentoring qualities\n✓ Proficiency in educational technology\n\nKNOWLEDGE & SKILLS:\n✓ Subject matter expertise\n✓ Pedagogical innovation\n✓ Student assessment techniques\n✓ Classroom management\n✓ Multicultural sensitivity\n✓ Problem-solving abilities\n\nCOMPENSATION & BENEFITS:\n✓ Competitive salary per Minimum Wages Ordinance 1961\n✓ EOBI (Employee's Old Age Benefits Institution) registration\n✓ PESSI medical coverage\n✓ 14 days annual leave + 10 days casual leave\n✓ Maternity benefits (if applicable)\n✓ Professional development allowance\n✓ Health insurance (per PESSI Ordinance)\n\nEMPLOYMENT TERMS (IC&E Ordinance 1968):\n✓ Contract type: Fixed-term or open-ended\n✓ Probation period: 3-6 months (with basic protections)\n✓ Notice period: 1 month (per IC&E 1968)\n✓ Termination: Only for valid reasons with due process\n✓ Final settlement: As per Pakistani labour law\n✓ Confidentiality clause: Yes\n✓ Dispute resolution: Via labour commissioner\n\nKEY PERFORMANCE INDICATORS:\n✓ Student learning outcomes (test scores, assessments)\n✓ Class attendance and student engagement\n✓ Professional conduct and punctuality\n✓ Staff mentoring effectiveness\n✓ Curriculum implementation compliance\n✓ Parent satisfaction scores\n\nWORKING CONDITIONS:\n✓ Standard school hours (typical 8 AM - 3 PM)\n✓ Additional preparation time (subject to Factories Act 1934 - 48 hrs/week max)\n✓ Safe working environment\n✓ Professional development opportunities\n✓ Collaborative team environment\n\nLEGAL COMPLIANCE:\nThis position is offered in full compliance with:\n✓ IC&E Ordinance 1968 (Contracts & termination)\n✓ EOBI Act 1976 (Employee pensions)\n✓ PESSI Ordinance (Medical & maternity)\n✓ Factories Act 1934 (Working hours)\n✓ Minimum Wages Ordinance 1961\n✓ Payment of Wages Act 1936\n✓ Maternity Ordinance 1962\n✓ Disabled Persons Ordinance 1981\n\nAPPLICATION PROCESS:\n1. Submit CV and cover letter\n2. HR screening (1-2 days)\n3. Written assessment (1 hour)\n4. Interview with Principal (30-45 mins)\n5. Reference check\n6. Offer letter and contract\n\nNote: This JD is created using Headstart HR Suite for Pakistani schools. All terms comply with national labour laws.";
   document.getElementById("obody").innerHTML='<pre class="otext">'+esc(outTxt)+'</pre>';
   document.getElementById("cpbtn").style.display="inline-block";
   document.getElementById("expbtn").style.display="inline-block";
+  document.getElementById("savbtn").style.display="inline-block";
   showLaws(["ico","pr","mw"]);
+  document.getElementById("errMsg").innerHTML='<div class="success-msg">✓ Demo example loaded. This is what generated content looks like!</div>';
 }
 
 function buildSB(){
@@ -301,16 +393,23 @@ function showEmpty(){
   document.getElementById("otitle").style.color="#94aab5";
   document.getElementById("cpbtn").style.display="none";
   document.getElementById("expbtn").style.display="none";
+  document.getElementById("savbtn").style.display="none";
   document.getElementById("obody").innerHTML='<div class="empty"><div class="eico">▱</div><div class="etxt">Add context on the left, then select a workflow</div></div>';
   document.getElementById("lawbar").style.display="none";
+  document.getElementById("errMsg").innerHTML="";
 }
 
-function runWF(w){
+async function runWF(w){
   if(busy)return;
   
   var ctx=document.getElementById("ctx").value.trim();
   if(!ctx){
     alert("Add context first");
+    return;
+  }
+
+  if(!apiKey||apiKey.length<20){
+    document.getElementById("errMsg").innerHTML='<div class="err-msg">⚠️ Paste your Gemini API key (top right) to generate live content</div>';
     return;
   }
   
@@ -321,26 +420,35 @@ function runWF(w){
   showLaws(w.lw);
   document.getElementById("otitle").textContent=w.nm;
   document.getElementById("otitle").style.color="#0a9396";
+  document.getElementById("errMsg").innerHTML="";
   
   var spin=document.createElement("div");
   spin.className="spin-wrap";
-  spin.innerHTML='<div class="spin"></div><div class="stxt">Generating example...</div>';
+  spin.innerHTML='<div class="spin"></div><div class="stxt">Generating with Gemini AI...</div>';
   document.getElementById("obody").innerHTML="";
   document.getElementById("obody").appendChild(spin);
   
-  setTimeout(function(){
-    if(w.id==="jd")outTxt=EXAMPLES.jd;
-    else if(w.id==="iq")outTxt=EXAMPLES.iq;
-    else if(w.id==="wl")outTxt=EXAMPLES.wl;
-    else if(w.id==="lt")outTxt=EXAMPLES.lt;
-    else outTxt="[Demo output would appear here with Gemini AI API key]";
-    
-    document.getElementById("obody").innerHTML='<pre class="otext">'+esc(outTxt)+'</pre>';
-    document.getElementById("cpbtn").style.display="inline-block";
-    document.getElementById("expbtn").style.display="inline-block";
-    busy=false;
-    buildWF();
-  },800);
+  try{
+    if(apiKey==="demo-mode-enabled"){
+      outTxt="[Demo Mode]\n\nThis is where Gemini AI would generate "+w.nm+" based on your context.\n\nTo see real generation:\n1. Get free API key from https://aistudio.google.com\n2. Paste it in the top-right\n3. Select workflow\n\nYour context: "+ctx+"\n\nWorkflow prompt will use Pakistan labour laws: "+w.lw.join(", ");
+    }else{
+      var prompt=w.prompt.replace("{ctx}",ctx);
+      const genAI=new window.GoogleGenerativeAI(apiKey);
+      const model=genAI.getGenerativeModel({model:"gemini-1.5-flash"});
+      const result=await model.generateContent(prompt);
+      outTxt=result.response.text();
+    }
+  }catch(e){
+    outTxt="Error: "+e.message+"\n\nTroubleshooting:\n- Check API key is valid\n- Ensure it has remaining quota\n- Try a simpler context\n- Check internet connection";
+    document.getElementById("errMsg").innerHTML='<div class="err-msg">❌ '+e.message+'</div>';
+  }
+  
+  document.getElementById("obody").innerHTML='<pre class="otext">'+esc(outTxt)+'</pre>';
+  document.getElementById("cpbtn").style.display="inline-block";
+  document.getElementById("expbtn").style.display="inline-block";
+  document.getElementById("savbtn").style.display="inline-block";
+  busy=false;
+  buildWF();
 }
 
 function doCopy(){
@@ -355,8 +463,17 @@ function doExport(){
   if(!outTxt)return;
   var el=document.createElement("div");
   el.style.padding="20px";
-  el.innerHTML="<h1 style='color:#0a9396;'>HR Document</h1><pre style='white-space:pre-wrap;'>"+esc(outTxt)+"</pre>";
-  html2pdf().set({filename:"HR-Document.pdf"}).from(el).save();
+  el.innerHTML="<h1 style='color:#0a9396;margin-bottom:20px;'>"+curWf.nm+"</h1><hr style='margin:20px 0;'><pre style='white-space:pre-wrap;font-size:12px;line-height:1.6;'>"+esc(outTxt)+"</pre><hr style='margin:20px 0;'><p style='font-size:10px;color:#999;'>Generated by Headstart HR Suite • Pakistan Schools HR Automation</p>";
+  html2pdf().set({filename:"HR-"+curWf.id+"-"+new Date().toISOString().split('T')[0]+".pdf",margin:10}).from(el).save();
+}
+
+function doSave(){
+  if(!outTxt)return;
+  var content=outTxt;
+  var filename="HR-"+curWf.id+"-"+new Date().toISOString().split('T')[0]+".txt";
+  localStorage.setItem(filename,content);
+  document.getElementById("savbtn").textContent="✓ Saved!";
+  setTimeout(function(){document.getElementById("savbtn").textContent="💾 Save";},1500);
 }
 
 function esc(t){
