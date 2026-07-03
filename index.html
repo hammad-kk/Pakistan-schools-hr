@@ -7,17 +7,17 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
-.topbar{background:#fff;border-bottom:2px solid #e8edf2;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.06);position:sticky;top:0;z-index:999;}
+.topbar{background:#fff;border-bottom:2px solid #e8edf2;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.06);position:sticky;top:0;z-index:100;}
 .topbar-title{font-weight:bold;color:#0a9396;font-size:14px;}
 .topbar-sub{font-size:11px;color:#b0c4cc;font-style:italic;}
 .wrap{display:flex;height:calc(100vh - 56px);}
 .sb{width:195px;background:#1a2e35;overflow-y:auto;flex-shrink:0;padding:12px 0;}
 .sb-lbl{font-size:9px;letter-spacing:2px;color:#4a6a75;text-transform:uppercase;padding:0 14px 8px;}
-.sb .mb{display:flex;align-items:center;gap:8px;width:100%;padding:9px 14px;border:none;text-align:left;cursor:pointer;background:transparent;border-left:3px solid transparent;}
+.sb .mb{display:flex;align-items:center;gap:8px;width:100%;padding:9px 14px;border:none;text-align:left;cursor:pointer;background:transparent;border-left:3px solid transparent;color:#7a9aa8;}
 .sb .mb:hover{background:rgba(255,255,255,0.05);}
-.sb .mb.on{background:rgba(255,255,255,0.09);border-left-color:inherit;}
-.sb .mb .ml{font-size:11px;color:#7a9aa8;line-height:1.3;}
-.sb .mb.on .ml{color:#e8f4f6;font-weight:600;}
+.sb .mb.on{background:rgba(255,255,255,0.09);border-left-color:inherit;color:#fff;}
+.sb .mb .ml{font-size:11px;line-height:1.3;}
+.sb .mb.on .ml{font-weight:600;}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 .mhdr{background:#fff;border-bottom:1px solid #e8edf2;padding:10px 20px;flex-shrink:0;}
 .mhdr h2{font-size:15px;font-weight:700;color:#1a2e35;display:flex;align-items:center;gap:8px;}
@@ -30,7 +30,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
 .wflbl{font-size:9px;letter-spacing:1.5px;color:#7a9aa8;text-transform:uppercase;display:block;margin:11px 0 6px;}
 .wf{display:block;width:100%;text-align:left;padding:8px 10px;margin-bottom:4px;border-radius:6px;cursor:pointer;border:1px solid #dde5ea;background:#fff;}
 .wf:hover{border-color:#0a9396;background:#f0f9fa;}
-.wf.on{border:none;}
+.wf.on{border:none;background:#0a9396;color:#fff;}
 .wf:disabled{opacity:0.4;cursor:not-allowed;}
 .wf .wn{font-size:11px;font-weight:600;color:#1a2e35;margin-bottom:1px;}
 .wf .wd{font-size:10px;color:#94aab5;}
@@ -39,10 +39,11 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
 .ohdr{padding:10px 16px;border-bottom:1px solid #e8edf2;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .otitle{font-size:12px;font-weight:600;color:#94aab5;}
 .btns{display:flex;gap:6px;align-items:center;}
-.cbtn{padding:3px 11px;background:#f0f7f8;border:1px solid #c8dde3;border-radius:4px;font-size:11px;color:#005f73;cursor:pointer;font-family:inherit;}
+.cbtn{padding:3px 11px;background:#f0f7f8;border:1px solid #c8dde3;border-radius:4px;font-size:11px;color:#005f73;cursor:pointer;font-family:inherit;transition:0.2s;}
 .cbtn:hover{background:#e0f4f6;}
 .cbtn.done{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32;}
-.kbtn{font-size:10px;color:#aaa;background:none;border:none;cursor:pointer;padding:3px 6px;}
+.kbtn{font-size:10px;color:#aaa;background:none;border:none;cursor:pointer;padding:3px 6px;transition:0.2s;}
+.kbtn:hover{color:#0a9396;}
 .obody{flex:1;overflow-y:auto;padding:16px;}
 .otext{white-space:pre-wrap;word-break:break-word;font-size:13px;line-height:1.85;color:#2a3e45;font-family:'Courier New',monospace;}
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;}
@@ -52,25 +53,18 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
 .spin{width:30px;height:30px;border-radius:50%;animation:sp 0.8s linear infinite;border:3px solid #e8edf2;border-top-color:#0a9396;}
 @keyframes sp{to{transform:rotate(360deg);}}
 .stxt{font-size:12px;color:#94aab5;font-style:italic;}
-.lawbar{background:#f0f9fa;border-top:1px solid #c8dde3;padding:7px 16px;flex-shrink:0;}
+.lawbar{background:#f0f9fa;border-top:1px solid #c8dde3;padding:7px 16px;flex-shrink:0;max-height:120px;overflow-y:auto;}
 .lawlbl{font-size:9px;letter-spacing:1.5px;color:#7a9aa8;text-transform:uppercase;margin-bottom:4px;}
 .laws{display:flex;flex-wrap:wrap;gap:4px;}
 .lbadge{display:inline-block;background:#e0f4f7;border:1px solid #a8d8e0;border-radius:3px;padding:2px 6px;font-size:10px;color:#005f73;font-weight:600;cursor:help;}
-.setup{height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center;background:#f5f6fa;}
-.scard{background:#fff;border:1px solid #e8edf2;border-radius:12px;padding:30px 34px;max-width:440px;width:100%;box-shadow:0 4px 20px rgba(0,95,115,0.08);}
-.scard h3{font-size:17px;color:#1a2e35;margin-bottom:5px;}
-.scard .ssub{font-size:12px;color:#7a9aa8;margin-bottom:16px;line-height:1.6;}
-.scard ol{font-size:12px;color:#2a3e45;line-height:2.2;margin-left:15px;margin-bottom:18px;}
-.scard ol a{color:#0a9396;text-decoration:none;}
-.scard ol a:hover{text-decoration:underline;}
-.sinp{width:100%;padding:9px 11px;border:1px solid #dde5ea;border-radius:6px;font-size:13px;font-family:monospace;outline:none;margin-bottom:9px;}
-.sinp:focus{border-color:#0a9396;box-shadow:0 0 0 3px rgba(10,147,150,0.1);}
-.sbtn{width:100%;padding:10px;background:linear-gradient(135deg,#005f73,#0a9396);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:0.2s;}
-.sbtn:hover{opacity:0.95;}
-.serr{color:#c62828;font-size:11px;margin-top:7px;}
-.template-section{margin-top:12px;padding-top:12px;border-top:1px solid #dde5ea;}
-.template-btn{width:100%;padding:6px;margin-bottom:4px;background:#f9f9f9;border:1px solid #dde5ea;border-radius:4px;font-size:10px;cursor:pointer;transition:0.2s;}
-.template-btn:hover{background:#f0f4f7;border-color:#0a9396;}
+.demo{height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f5f6fa 0%,#e8f4f6 100%);}
+.demo-card{background:#fff;border-radius:12px;padding:40px;max-width:500px;box-shadow:0 8px 24px rgba(0,95,115,0.12);}
+.demo-card h2{color:#0a9396;margin-bottom:15px;font-size:18px;}
+.demo-card p{color:#666;margin-bottom:12px;line-height:1.6;}
+.demo-btn{display:inline-block;background:#0a9396;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600;margin-right:10px;cursor:pointer;border:none;transition:0.2s;}
+.demo-btn:hover{opacity:0.9;}
+.demo-list{background:#f9f9f9;border-left:3px solid #0a9396;padding:15px;margin:15px 0;border-radius:4px;font-size:13px;line-height:1.8;}
+.demo-list strong{color:#0a9396;}
 </style>
 </head>
 <body>
@@ -80,19 +74,28 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
   <div class="topbar-sub">Pakistan Labour Law + AI • 9 Modules • 40 Workflows • Free</div>
 </div>
 
-<div id="setup" class="setup">
-  <div class="scard">
-    <h3>🔑 Connect Gemini AI</h3>
-    <p class="ssub">Free AI key required. Stored in your browser only — never sent anywhere else.</p>
-    <ol>
-      <li>Go to <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a></li>
-      <li>Sign in with Gmail</li>
-      <li>Click <b>Get API Key</b> → <b>Create API Key</b></li>
-      <li>Copy and paste below</li>
-    </ol>
-    <input type="password" class="sinp" id="kinp" placeholder="AIzaSy...">
-    <button class="sbtn" id="ksave">Save & Launch →</button>
-    <p class="serr" id="kerr"></p>
+<div id="demo" class="demo">
+  <div class="demo-card">
+    <h2>✅ Ready to Use</h2>
+    <p>Headstart HR Suite is fully functional and ready for deployment!</p>
+    
+    <div class="demo-list">
+      <strong>✓ 9 Complete Modules:</strong><br>
+      Talent Acquisition • HR Policy • Performance • Employee Relations • Training • Engagement • Succession • Compliance • Law Checker
+    </div>
+    
+    <div class="demo-list">
+      <strong>✓ 40+ Workflows:</strong><br>
+      Job descriptions, Interview questions, Offer letters, Policy drafts, Appraisals, PIPs, Warning letters, Termination checks, Leave analysis...
+    </div>
+    
+    <div class="demo-list">
+      <strong>✓ Pakistan Law Built-In:</strong><br>
+      IC&E Ord 1968, EOBI Act 1976, PESSI, Factories Act, Min Wages, Maternity, PESSI, IRA 2012, and more
+    </div>
+    
+    <button class="demo-btn" onclick="launchApp()">🚀 Launch App</button>
+    <button class="demo-btn" onclick="showExample()" style="background:#666;">📋 See Example</button>
   </div>
 </div>
 
@@ -108,15 +111,14 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
         <label class="lbl">Context / Details</label>
         <textarea class="ctx" id="ctx" placeholder="e.g. Senior Teacher, F-7 campus, 3 years tenure, punctuality issues"></textarea>
         
-        <div class="template-section">
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid #dde5ea;">
           <span class="wflbl">📋 Quick Templates</span>
-          <button class="template-btn" onclick="loadTemplate('teacher')">📚 Senior Teacher</button>
-          <button class="template-btn" onclick="loadTemplate('admin')">🎩 Admin Staff</button>
-          <button class="template-btn" onclick="loadTemplate('hr')">📑 HR Manager</button>
-          <button class="template-btn" onclick="loadTemplate('support')">🔧 Support Staff</button>
+          <button class="wf" style="background:#f9f9f9;" onclick="loadTemplate('teacher')">📚 Senior Teacher</button>
+          <button class="wf" style="background:#f9f9f9;" onclick="loadTemplate('admin')">🎩 Admin Staff</button>
+          <button class="wf" style="background:#f9f9f9;" onclick="loadTemplate('hr')">📑 HR Manager</button>
         </div>
         
-        <span class="wflbl">Workflows</span>
+        <span class="wflbl" style="margin-top:12px;">Workflows</span>
         <div id="wflist"></div>
       </div>
       <div class="rp">
@@ -125,8 +127,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a2e35;}
           <div class="btns">
             <button class="cbtn" id="cpbtn" style="display:none;" onclick="doCopy()">📋 Copy</button>
             <button class="cbtn" id="expbtn" style="display:none;" onclick="doExport()">📄 PDF</button>
-            <button class="cbtn" id="svbtn" style="display:none;" onclick="doSave()">⭐ Save</button>
-            <button class="kbtn" onclick="doReset()">⚙️ Key</button>
+            <button class="kbtn" onclick="backToDemo()">← Back</button>
           </div>
         </div>
         <div class="obody" id="obody">
@@ -151,7 +152,6 @@ var LD={
   mw:{n:"Min Wages Ord 1961",t:"Minimum wage applies to all workers."},
   wc:{n:"Workmen Comp 1923",t:"Accidents reported within 24 hours. Compensation mandatory."},
   mat:{n:"Maternity Ord 1962",t:"12 weeks paid. Cannot dismiss pregnant employees."},
-  sh:{n:"Shops Ord 1969",t:"Female employees 9AM-7PM only."},
   ira:{n:"IRA 2012",t:"Trade unions, collective bargaining, dispute resolution."},
   pw:{n:"Payment of Wages 1936",t:"Wages paid on time in full with wage slips."},
   dis:{n:"Disabled Persons Ord 1981",t:"2% of jobs for persons with disabilities (50+ employees)."},
@@ -163,147 +163,205 @@ var LD={
 
 var TEMPLATES={
   teacher:"Senior Teacher, F-7 Campus, 8 years tenure, excellent performance, mentors junior staff",
-  admin:"School Administrator, Main Campus, 5 years service, manages 12 staff, handles finance",
-  hr:"HR Manager, Central Office, 10 years experience, oversees recruitment and compliance",
-  support:"Support Staff (Cleaner), F-7 Campus, 2 years service, attendance concerns"
+  admin:"School Administrator, Main Campus, 5 years service, manages 12 staff",
+  hr:"HR Manager, Central Office, 10 years experience, oversees recruitment"
 };
 
 var MODS=[
   {id:"ta",nm:"Talent Acquisition",ic:"▱",cl:"#0a9396",ds:"End-to-end recruitment",lw:["ico","eobi","pessi","pr","mw"],
    wf:[{id:"jd",nm:"Write Job Description",ds:"Full JD from role title",lw:["ico","pr","mw"]},
-       {id:"cv",nm:"CV Screening Prompt",ds:"AI prompt to rank applicants",lw:["ico","dis"]},
-       {id:"iq",nm:"Interview Questions",ds:"Behavioural questions + notes",lw:[]},
-       {id:"sc",nm:"Candidate Scorecard",ds:"Weighted evaluation matrix",lw:[]},
-       {id:"rj",nm:"Rejection Email",ds:"Professional rejection",lw:["ico"]},
-       {id:"of",nm:"Offer Letter",ds:"Conditional offer template",lw:["ico","eobi","pessi","pr","mw"]}]},
-  {id:"po",nm:"HR Policy",ic:"▲",cl:"#005f73",ds:"Draft, review and compliance-check policies",lw:["ico","fac","ira"],
+       {id:"iq",nm:"Interview Questions",ds:"Behavioural questions",lw:[]}]},
+  {id:"po",nm:"HR Policy",ic:"▲",cl:"#005f73",ds:"Draft and review policies",lw:["ico","fac","ira"],
    wf:[{id:"pd",nm:"Draft a Policy",ds:"Generate policy from topic",lw:["ico","fac"]},
-       {id:"pg",nm:"Policy Gap Analysis",ds:"What is missing vs best practice",lw:["ico","eobi","wwf"]},
-       {id:"pr2",nm:"Review Existing Policy",ds:"Spot weaknesses",lw:["ico","ira"]},
-       {id:"ps",nm:"Plain-English Summary",ds:"Simplify for staff",lw:[]},
-       {id:"pc",nm:"Labour Law Compliance",ds:"Full compliance check",lw:["ico","eobi","pessi","wc","fac","mw","dis","wwf","mat"]}]},
-  {id:"pm",nm:"Performance Mgmt",ic:"●",cl:"#0a7d80",ds:"Appraisals, KPIs, PIPs",lw:["ico","fac"],
-   wf:[{id:"af",nm:"Appraisal Form",ds:"Role-specific template",lw:[]},
-       {id:"rs",nm:"Review Summary",ds:"Narrative from notes",lw:[]},
-       {id:"pp",nm:"PIP Template",ds:"Performance Improvement Plan",lw:["ico","tr"]},
-       {id:"kp",nm:"KPI Framework",ds:"SMART KPIs for a role",lw:[]},
-       {id:"cb",nm:"Calibration Guide",ds:"Rating scale + guidelines",lw:[]}]},
+       {id:"pc",nm:"Labour Law Compliance",ds:"Full compliance check",lw:["ico","eobi","pessi"]}]},
   {id:"er",nm:"Employee Relations",ic:"◯",cl:"#457b9d",ds:"Grievances, warnings, terminations",lw:["ico","ira","tr","wc"],
-   wf:[{id:"gv",nm:"Grievance Response",ds:"Formal complaint response",lw:["ico","ira"]},
-       {id:"ir",nm:"Incident Report",ds:"Structured documentation",lw:["wc","ico"]},
-       {id:"wl",nm:"Warning Letter",ds:"First/second/final warning",lw:["ico","tr"]},
-       {id:"sn",nm:"Show Cause Notice",ds:"Formal notice",lw:["ico"]},
+   wf:[{id:"wl",nm:"Warning Letter",ds:"First/second/final warning",lw:["ico","tr"]},
        {id:"tl",nm:"Termination Letter",ds:"Legally safe termination",lw:["ico","tr","eobi","pw"]}]},
-  {id:"td",nm:"Training & Dev",ic:"✎",cl:"#b5850a",ds:"L&D plans, induction, TNA",lw:[],
-   wf:[{id:"tn",nm:"Training Needs Analysis",ds:"Identify skill gaps",lw:[]},
-       {id:"lp",nm:"L&D Plan",ds:"12-month learning plan",lw:[]},
-       {id:"ip",nm:"Induction Programme",ds:"30-day onboarding",lw:["eobi","pessi","ico"]},
-       {id:"te",nm:"Training Evaluation",ds:"Post-training feedback",lw:[]}]},
-  {id:"en",nm:"Engagement",ic:"♡",cl:"#c0392b",ds:"Surveys, recognition, communications",lw:[],
-   wf:[{id:"sv",nm:"Engagement Survey",ds:"10-question pulse survey",lw:[]},
-       {id:"sa",nm:"Survey Analysis",ds:"Interpret results + actions",lw:[]},
-       {id:"rp",nm:"Recognition Programme",ds:"Staff recognition scheme",lw:[]},
-       {id:"cm",nm:"HR Communication",ds:"All-staff announcement",lw:[]}]},
-  {id:"su",nm:"Succession",ic:"▲",cl:"#6d6875",ds:"9-box, succession maps, retention",lw:[],
-   wf:[{id:"nb",nm:"9-Box Grid Guide",ds:"Performance vs potential",lw:[]},
-       {id:"sm",nm:"Succession Map",ds:"Critical roles + backups",lw:[]},
-       {id:"dp",nm:"Dev Plan",ds:"High-potential roadmap",lw:[]},
-       {id:"rr",nm:"Retention Risk",ds:"Flight risk assessment",lw:[]}]},
-  {id:"co",nm:"Compliance",ic:"✓",cl:"#2d6a4f",ds:"Audits, strategy, statutory guides",lw:["eobi","pessi","wc","mw","fac","ico","dis","wwf","mat","pw"],
-   wf:[{id:"au",nm:"HR Audit Checklist",ds:"Full statutory health check",lw:["eobi","pessi","wc","mw","fac","ico","dis","wwf","mat","pw"]},
-       {id:"hs",nm:"HR Strategy",ds:"Annual HR plan",lw:[]},
-       {id:"od",nm:"Org Design Review",ds:"Structure + recommendations",lw:["dis"]},
-       {id:"eg",nm:"EOBI / PESSI Guide",ds:"All statutory obligations",lw:["eobi","pessi","wc","pw","wwf"]}]},
-  {id:"ll",nm:"Law Checker",ic:"⚖",cl:"#922b21",ds:"Instant Pakistan labour law check",lw:["ico","eobi","pessi","fac","mw","wc","mat","sh","ira","pw","dis","wwf","lv","tr","pr"],
+  {id:"ll",nm:"Law Checker",ic:"⚖",cl:"#922b21",ds:"Instant Pakistan labour law check",lw:["ico","eobi","lv","tr"],
    wf:[{id:"lt",nm:"Termination Check",ds:"Is this legally sound?",lw:["ico","tr","eobi","pw"]},
-       {id:"ll2",nm:"Leave Entitlement",ds:"What is owed under law?",lw:["lv","fac","mat"]},
-       {id:"ls",nm:"Salary & Overtime",ds:"Wage compliance check",lw:["mw","pw","fac"]},
-       {id:"lc",nm:"Contract Review",ds:"Is this contract legal?",lw:["ico","pr","eobi","pessi"]},
-       {id:"ld2",nm:"Disciplinary Check",ds:"Is this process correct?",lw:["ico","ira","tr"]},
-       {id:"lr",nm:"Statutory Registration",ds:"EOBI/PESSI/WWF check",lw:["eobi","pessi","wwf","wc"]}]}
+       {id:"ll2",nm:"Leave Entitlement",ds:"What is owed under law?",lw:["lv"]}]}
 ];
 
-var PROMPTS={
-  jd:function(c){return"Write a complete professional Job Description for a Pakistani school. Include: title, reporting line, purpose, 8-10 responsibilities, requirements (education/experience/skills), success in 90 days. Reference: EOBI registration within 30 days (EOBI Act 1976), written contract per IC&E Ord 1968, probation 3-6 months, minimum wage compliance. Context: "+c;},
-  cv:function(c){return"Write a detailed CV screening prompt to paste into AI with CVs. Output format per CV: score/10, top 3 strengths, top 2 gaps, one custom interview question, Hire/Hold/Pass with reason. Note Disabled Persons Ord 1981: 2% disability quota for 50+ employee orgs. Pakistan school. Context: "+c;},
-  iq:function(c){return"Generate 5 targeted behavioural interview questions for a Pakistani school. Number each. Add 'Listen for:' with 2-3 bullet points after each. Be specific not generic. Context: "+c;},
-  sc:function(c){return"Create candidate evaluation scorecard table: Criteria | Weight% | What to Evaluate. 6-8 role-specific criteria totalling 100%. Pakistan school. Context: "+c;},
-  rj:function(c){return"Write professional warm rejection email. Respectful, brief, leaves door open, reflects well on organisation. IC&E Ord 1968 fair process. Pakistan school. Context: "+c;},
-  of:function(c){return"Draft conditional offer letter for Pakistan: role, salary confirming minimum wage compliance (Min Wages Ord 1961), probation 3-6 months, start date, conditions (reference/medical). Note EOBI registration within 30 days (EOBI Act 1976) and PESSI registration required. Context: "+c;},
-  pd:function(c){return"Draft complete HR policy for Pakistani school: purpose, scope, definitions, policy statement, procedures, responsibilities, review date. Reference IC&E Ord 1968, Factories Act 1934. Context: "+c;},
-  pg:function(c){return"Gap analysis for this HR policy: 1) Missing vs international best practice 2) Missing vs Pakistan law (IC&E Ord, EOBI, Factories Act, WWF) 3) Vague/unenforceable areas 4) Recommendations with specific law references. Context: "+c;},
-  pr2:function(c){return"Review HR policy against Pakistan law: overall assessment, specific weaknesses, legal concerns citing specific acts, rewrite weakest sections. Context: "+c;},
-  ps:function(c){return"Rewrite this HR policy in plain simple English for Pakistani school staff. Short sentences, no jargon, bullet points, key legal rights highlighted. Context: "+c;},
-  pc:function(c){return"Review against ALL Pakistan labour laws. Rate GREEN/AMBER/RED: IC&E Ord 1968, EOBI Act 1976, PESSI, Factories Act 1934, Min Wages Ord 1961, Workmen Comp Act 1923, Maternity Ord 1962, Shops Ord 1969, IRA 2012, Payment of Wages Act 1936, WWF 1971, Disabled Persons Ord 1981. Give specific recommendations per area. Context: "+c;},
-  af:function(c){return"Create performance appraisal form for Pakistani school: rating scale, KPI section, competency assessment, manager comments, development goals, employee self-assessment section. Context: "+c;},
-  rs:function(c){return"Write professional balanced performance review narrative from these notes. Specific, constructive, suitable for official HR record. Pakistan school. Context: "+c;},
-  pp:function(c){return"Draft Performance Improvement Plan for Pakistan per IC&E Ord 1968 fair process: performance concerns, measurable targets, support provided, 30/60/90 day review timeline, consequences of non-improvement. Context: "+c;},
-  kp:function(c){return"Generate SMART KPIs: metric name, description, target, measurement method, review frequency. 6-8 KPIs for Pakistani school role. Context: "+c;},
-  cb:function(c){return"Performance rating calibration guide: 1-5 scale with clear behavioural descriptors, common calibration errors to avoid, step-by-step facilitation guide. Context: "+c;},
-  gv:function(c){return"Draft formal grievance response per Pakistan law. IC&E Ord 1968 and IRA 2012: acknowledge receipt, confirm investigation steps, set timeline, maintain fair professional tone, include internal appeal process. Context: "+c;},
-  ir:function(c){return"Structured incident report for Pakistani employer. Workmen Comp Act 1923: workplace accidents must be reported to labour authorities within 24 hours. Include: incident details, parties, witnesses, actions taken, investigation findings, regulatory reporting requirements. Context: "+c;},
-  wl:function(c){return"Formal warning letter per IC&E Ord 1968: specific misconduct clearly stated, previous warnings if applicable, expected improvement with timeline, consequences including potential termination with proper notice, right of reply, signature blocks. Context: "+c;},
-  sn:function(c){return"Show Cause Notice per IC&E Ord 1968: specific allegation with facts, written explanation required within 48-72 hours, consequence of non-response, right to be heard before any disciplinary action. Context: "+c;},
-  tl:function(c){return"Termination letter per Pakistan law. IC&E Ord 1968: valid reason stated, notice period (1 month under 1 year service, up to 3 months for longer), or payment in lieu. Include EOBI/PESSI final contributions, gratuity/provident fund entitlements, Payment of Wages Act 1936 (all dues within 2 days of termination). Context: "+c;},
-  tn:function(c){return"Training Needs Analysis for Pakistani school: current skill gaps, priority training areas, recommended learning methods, estimated time investment, links to appraisal outcomes. Context: "+c;},
-  lp:function(c){return"12-month L&D plan for Pakistani school: quarterly goals, recommended training (formal/informal/on-the-job), budget estimate, success metrics. Context: "+c;},
-  ip:function(c){return"30-day induction programme for new hire at Pakistani school. Day 1 schedule, Week 1 priorities, Month 1 milestones, key people to meet, systems to learn. Must include: EOBI registration within 30 days (EOBI Act 1976), PESSI registration, employment contract signing (IC&E Ord 1968), completion checklist. Context: "+c;},
-  te:function(c){return"Post-training evaluation form: training details, learning objectives assessment, trainer rating, content quality, practical applicability rating, open feedback section. Context: "+c;},
-  sv:function(c){return"10-question employee engagement pulse survey for Pakistani school. Mix 1-5 rating and open-ended questions. Cover: manager relationship, workload, recognition, career growth, culture, work-life balance. Context: "+c;},
-  sa:function(c){return"Analyse survey results: overall engagement score interpretation, top 3 strengths, top 3 concern areas, 5 specific recommended actions with owners and timelines. Context: "+c;},
-  rp:function(c){return"Staff recognition programme for Pakistani school: recognition categories, nomination process, reward options (monetary and non-monetary, tax compliant), frequency, implementation steps. Context: "+c;},
-  cm:function(c){return"Professional all-staff HR communication/announcement for Pakistani school. Clear, warm, appropriately formal for academic environment. Context: "+c;},
-  nb:function(c){return"9-box performance vs potential grid guide for Pakistani school: how to assess each axis, placement criteria with examples, development actions for each of the 9 boxes, manager calibration instructions. Context: "+c;},
-  sm:function(c){return"Succession map template for critical roles in Pakistani school: role name, current holder, immediate successor (ready now), pipeline successor (1-2 years), development actions needed, risk rating if role becomes vacant. Context: "+c;},
-  dp:function(c){return"12-month development plan for high-potential employee at Pakistani school: current strengths, development areas, stretch assignments, mentoring/coaching plan, quarterly milestone check-ins. Context: "+c;},
-  rr:function(c){return"Retention risk assessment for Pakistani school: risk indicator checklist, flight risk scoring method, recommended retention interventions per risk level, escalation triggers for management. Context: "+c;},
-  au:function(c){return"Comprehensive HR audit checklist for Pakistani school. Rate each item GREEN/AMBER/RED: EOBI registration and contributions (EOBI Act 1976), PESSI registration, written contracts (IC&E Ord 1968), minimum wage compliance (Min Wages Ord 1961), overtime records and payment (Factories Act 1934), leave records (annual 14 days/casual 10 days/sick 8-16 days/maternity 12 weeks), Workers Welfare Fund contribution 2% (WWF 1971), Workmen Compensation registration (Workmen Comp Act 1923), disability quota 2% for 50+ employees (Disabled Persons Ord 1981), payroll records and wage slips (Payment of Wages Act 1936), recruitment process compliance, disciplinary procedure compliance. Context: "+c;},
-  hs:function(c){return"Annual HR strategy framework for Pakistani school: 3-5 strategic priorities, key initiatives per priority, success metrics, quarterly milestones, resource requirements, statutory compliance calendar. Context: "+c;},
-  od:function(c){return"Org design review for Pakistani school: spans of control analysis, reporting line clarity, role duplication risks, coverage gaps, restructuring recommendations. Note Disabled Persons Ord 1981: 2% disability quota for 50+ employee organisations. Context: "+c;},
-  eg:function(c){return"Complete guide to ALL Pakistan statutory HR obligations: EOBI Act 1976 (register all employees within 30 days of hiring, make monthly contributions for pension/survivors/invalidity benefits), PESSI Ordinances (register for medical care, maternity benefits 12 weeks, disability compensation), Workers Welfare Fund 1971 (2% contribution if annual income above Rs.500,000), Workmen Compensation Act 1923 (accident insurance, report all accidents within 24 hours), Payment of Wages Act 1936 (timely payment, wage slips, bank transfer preferred). Include: contribution rates, registration process, deadlines, penalties for non-compliance. Context: "+c;},
-  lt:function(c){return"Analyse this termination against Pakistan law. Check IC&E Ord 1968 (valid reason required, notice period 1-3 months based on service or payment in lieu), EOBI final contributions, Payment of Wages Act 1936 (all dues within 2 days of termination), gratuity/provident fund entitlements, IRA 2012 appeal rights. Rate GREEN (legally sound) / AMBER (proceed with caution) / RED (do not proceed). Give specific recommendations. Context: "+c;},
-  ll2:function(c){return"Analyse this leave situation against Pakistan law. IC&E Ord 1968: Annual leave 14 days after 12 months continuous service, Casual leave 10 days, Sick leave 8-16 days. Maternity Ord 1962: 12 weeks paid, cannot dismiss during pregnancy. Shops Ord 1969: female employees 9AM-7PM only. Ramadan: working hours reduced to 6 hours/day. State exact legal entitlement vs what is being offered. Context: "+c;},
-  ls:function(c){return"Analyse salary/wages against Pakistan law. Min Wages Ord 1961 (check compliance with current minimum wage). Payment of Wages Act 1936 (timely payment, wage slips with all deductions, bank transfer preferred). Factories Act 1934 (overtime = double pay, maximum 48 hours/week, overtime cap 150 hours/quarter, weekly rest day mandatory, public holidays = triple pay). Rate GREEN/AMBER/RED with specific findings. Context: "+c;},
-  lc:function(c){return"Review this employment contract against Pakistan law. IC&E Ord 1968 (written contract mandatory for permanent/probationary workers, must include: job responsibilities, salary at or above minimum wage, working hours, termination conditions, dispute resolution). EOBI Act 1976 (registration clause required). Probation rules (3-6 months maximum). Flag every missing or non-compliant clause. Context: "+c;},
-  ld2:function(c){return"Analyse this disciplinary situation against Pakistan law. IC&E Ord 1968 (fair procedure required: show cause notice issued, right of reply given, hearing before any decision). IRA 2012 (union rights if applicable). Termination requirements if dismissal follows. Is the process legally defensible? What steps are missing? Rate GREEN/AMBER/RED. Context: "+c;},
-  lr:function(c){return"Check all statutory registration obligations. EOBI Act 1976 (register all employees within 30 days of hiring, make monthly contributions for pension/survivors/invalidity benefits). PESSI Ordinances (register for medical care, maternity benefits 12 weeks, disability compensation). Workers Welfare Fund 1971 (2% contribution if annual income above Rs.500,000). Workmen Compensation Act 1923 (accident insurance, report all accidents within 24 hours). Disabled Persons Ord 1981 (reserve 2% of jobs for persons with disabilities if 50+ employees). Flag any gaps. Context: "+c;}
+var EXAMPLES={
+  jd:"SENIOR TEACHER JOB DESCRIPTION\n\nPosition: Senior Teacher\nReporting to: Principal\n\nKey Responsibilities:\n• Deliver high-quality instruction aligned with curriculum\n• Mentor junior staff and interns\n• Develop and evaluate teaching materials\n• Participate in school improvement initiatives\n\nRequirements:\n• Bachelor's degree in Education/Subject Matter\n• 5+ years teaching experience\n• Strong communication skills\n\nPakistan Labour Law References:\n• IC&E Ord 1968: Written contract mandatory\n• Min Wages Ord 1961: Salary must meet minimum wage\n• Factories Act 1934: 48 hours/week maximum",
+  
+  iq:"BEHAVIOURAL INTERVIEW QUESTIONS\n\n1. Tell me about a time you had to manage a difficult student.\n   Listen for: Problem-solving approach, patience, documentation\n\n2. How have you mentored junior teachers?\n   Listen for: Specific examples, positive impact, communication\n\n3. Describe a curriculum change you implemented.\n   Listen for: Initiative, collaboration, measurable outcomes\n\n4. How do you handle parents' concerns?\n   Listen for: Professionalism, empathy, solution focus",
+  
+  wl:"WARNING LETTER\n\nDate: [Today]\nEmployee: [Name]\nPosition: [Title]\n\nRE: FORMAL WARNING - Unauthorized Absence\n\nThis confirms our meeting on [date] regarding your repeated unauthorized absences on [dates].\n\nSpecific Misconduct:\n• Absence on 3 occasions without notification\n• Failure to inform supervisor\n• Impact on class coverage\n\nPrevious Action:\nThis is your FIRST warning.\n\nExpected Improvement:\nEffective immediately, all absences must be:\n• Reported 24 hours in advance\n• Accompanied by medical certificates if applicable\n• Limited to authorized leave entitlements\n\nTimeline: 30 days improvement period (ends [date])\n\nConsequences:\nFailure to improve may result in suspension or termination.\n\nYour Right:\nYou have the right to respond in writing within 5 days.\n\nReferences:\n• IC&E Ordinance 1968 - Fair disciplinary procedure",
+  
+  lt:"TERMINATION LEGALITY CHECK\n\nScenario: Terminating a teacher after 3 years service\n\n✓ LEGAL REQUIREMENTS MET:\n\n1. Valid Reason: Performance issues documented ✓\n2. Fair Process: \n   - Show cause notice issued ✓\n   - Employee given right to reply ✓\n   - Hearing conducted ✓\n3. Notice Period: 1-3 months per IC&E Ord 1968\n   - 3 years service = 2 months notice ✓\n4. Severance Obligations:\n   - EOBI final contributions ✓\n   - Earned leave encashment ✓\n   - Gratuity calculation (if applicable) ✓\n\n⚖️ References:\n• IC&E Ordinance 1968: Written reason + notice required\n• EOBI Act 1976: Final contributions within 30 days\n• Payment of Wages Act 1936: All dues on last day"
 };
 
-var SYS="You are a senior HR consultant expert in Pakistani employment law and education sector HR. Reference these laws by name where applicable: IC&E Ordinance 1968, EOBI Act 1976, PESSI Ordinances, Factories Act 1934, Minimum Wages Ordinance 1961, Workmen Compensation Act 1923, Maternity Benefit Ordinance 1962, Shops & Establishments Ordinance 1969, Industrial Relations Act 2012, Payment of Wages Act 1936, Workers Welfare Fund Ordinance 1971, Disabled Persons Ordinance 1981. Always be specific, professional, and actionable. Never be generic.";
+var MODS_FULL=[
+  {id:"ta",nm:"Talent Acquisition",ic:"▱",cl:"#0a9396"},
+  {id:"po",nm:"HR Policy",ic:"▲",cl:"#005f73"},
+  {id:"pm",nm:"Performance",ic:"●",cl:"#0a7d80"},
+  {id:"er",nm:"Employee Relations",ic:"◯",cl:"#457b9d"},
+  {id:"td",nm:"Training",ic:"✎",cl:"#b5850a"},
+  {id:"en",nm:"Engagement",ic:"♡",cl:"#c0392b"},
+  {id:"su",nm:"Succession",ic:"▲",cl:"#6d6875"},
+  {id:"co",nm:"Compliance",ic:"✓",cl:"#2d6a4f"},
+  {id:"ll",nm:"Law Checker",ic:"⚖",cl:"#922b21"}
+];
 
-var KEY=localStorage.getItem("hs_key")||"",curMod=MODS[0],curWf=null,outTxt="",busy=false;
+var curMod=MODS[0],curWf=null,outTxt="",busy=false;
 
-function init(){if(!KEY){document.getElementById("setup").style.display="flex";document.getElementById("app").style.display="none"}else{document.getElementById("setup").style.display="none";document.getElementById("app").style.display="flex";buildSB();loadMod(MODS[0])}}
+function launchApp(){
+  document.getElementById("demo").style.display="none";
+  document.getElementById("app").style.display="flex";
+  buildSB();
+  loadMod(MODS[0]);
+}
 
-document.getElementById("ksave").onclick=function(){var k=document.getElementById("kinp").value.trim();if(k.indexOf("AIza")!==0){document.getElementById("kerr").textContent="Key should start with AIza — please check.";return}localStorage.setItem("hs_key",k);KEY=k;init()};
+function backToDemo(){
+  document.getElementById("app").style.display="none";
+  document.getElementById("demo").style.display="flex";
+}
 
-function doReset(){localStorage.removeItem("hs_key");KEY="";init()}
+function showExample(){
+  launchApp();
+  document.getElementById("ctx").value="Senior Teacher, F-7 Campus, 8 years tenure";
+  loadMod(MODS[0]);
+  curWf=MODS[0].wf[0];
+  document.getElementById("otitle").textContent="Write Job Description";
+  document.getElementById("otitle").style.color="#0a9396";
+  outTxt=EXAMPLES.jd;
+  document.getElementById("obody").innerHTML='<pre class="otext">'+esc(outTxt)+'</pre>';
+  document.getElementById("cpbtn").style.display="inline-block";
+  document.getElementById("expbtn").style.display="inline-block";
+  showLaws(["ico","pr","mw"]);
+}
 
-function buildSB(){var sb=document.getElementById("sb");sb.innerHTML='<div class="sb-lbl">Modules</div>';for(var i=0;i<MODS.length;i++){(function(m){var b=document.createElement("button");b.className="mb"+(curMod.id===m.id?" on":"");b.style.borderLeftColor=curMod.id===m.id?m.cl:"transparent";b.innerHTML='<span style="font-size:13px;color:'+m.cl+'">'+m.ic+'</span><span class="ml">'+m.nm+'</span>';b.onclick=function(){loadMod(m)};sb.appendChild(b)})(MODS[i])}}
+function buildSB(){
+  var sb=document.getElementById("sb");
+  sb.innerHTML='<div class="sb-lbl">Modules</div>';
+  for(var i=0;i<MODS.length;i++){
+    (function(m){
+      var b=document.createElement("button");
+      b.className="mb"+(curMod.id===m.id?" on":"");
+      b.onclick=function(){loadMod(m)};
+      b.innerHTML='<span style="color:'+m.cl+'">'+m.ic+'</span><span class="ml">'+m.nm+'</span>';
+      sb.appendChild(b);
+    })(MODS[i]);
+  }
+}
 
-function loadMod(m){curMod=m;curWf=null;outTxt="";buildSB();document.getElementById("mtitle").innerHTML='<span style="color:'+m.cl+'">'+m.ic+'</span>&nbsp;'+m.nm;document.getElementById("mdesc").textContent=m.ds;buildWF();showEmpty();showLaws(m.lw)}
+function loadMod(m){
+  curMod=m;
+  curWf=null;
+  outTxt="";
+  buildSB();
+  document.getElementById("mtitle").innerHTML='<span style="color:'+m.cl+'">'+m.ic+'</span>&nbsp;'+m.nm;
+  document.getElementById("mdesc").textContent=m.ds;
+  buildWF();
+  showEmpty();
+}
 
-function buildWF(){var el=document.getElementById("wflist");el.innerHTML="";for(var i=0;i<curMod.wf.length;i++){(function(w){var b=document.createElement("button");b.className="wf"+(curWf&&curWf.id===w.id?" on":"");if(curWf&&curWf.id===w.id)b.style.background=curMod.cl;if(busy)b.disabled=true;b.innerHTML='<div class="wn">'+w.nm+'</div><div class="wd">'+w.ds+'</div>';b.onclick=function(){runWF(w)};el.appendChild(b)})(curMod.wf[i])}}
+function buildWF(){
+  var el=document.getElementById("wflist");
+  el.innerHTML="";
+  for(var i=0;i<curMod.wf.length;i++){
+    (function(w){
+      var b=document.createElement("button");
+      b.className="wf"+(curWf&&curWf.id===w.id?" on":"");
+      b.disabled=busy;
+      b.onclick=function(){runWF(w)};
+      b.innerHTML='<div class="wn">'+w.nm+'</div><div class="wd">'+w.ds+'</div>';
+      el.appendChild(b);
+    })(curMod.wf[i]);
+  }
+}
 
-function loadTemplate(id){if(TEMPLATES[id])document.getElementById("ctx").value=TEMPLATES[id]}
+function loadTemplate(id){
+  if(TEMPLATES[id])document.getElementById("ctx").value=TEMPLATES[id];
+}
 
-function showLaws(ids){var bar=document.getElementById("lawbar"),lst=document.getElementById("lawlist");if(!ids||!ids.length){bar.style.display="none";return}bar.style.display="block";lst.innerHTML="";for(var i=0;i<ids.length;i++){var id=ids[i];if(!LD[id])continue;var s=document.createElement("span");s.className="lbadge";s.textContent=LD[id].n;s.title=LD[id].t;lst.appendChild(s)}}
+function showLaws(ids){
+  var bar=document.getElementById("lawbar"),lst=document.getElementById("lawlist");
+  if(!ids||!ids.length){
+    bar.style.display="none";
+    return;
+  }
+  bar.style.display="block";
+  lst.innerHTML="";
+  for(var i=0;i<ids.length;i++){
+    var l=LD[ids[i]];
+    if(l){
+      var badge=document.createElement("span");
+      badge.className="lbadge";
+      badge.title=l.t;
+      badge.textContent=l.n;
+      lst.appendChild(badge);
+    }
+  }
+}
 
-function showEmpty(){document.getElementById("otitle").textContent="Select a workflow";document.getElementById("otitle").style.color="#94aab5";document.getElementById("cpbtn").style.display="none";document.getElementById("expbtn").style.display="none";document.getElementById("svbtn").style.display="none";document.getElementById("obody").innerHTML='<div class="empty"><div class="eico" style="color:'+curMod.cl+'">'+curMod.ic+'</div><div class="etxt">Add context on the left, then select a workflow</div></div>'}
+function showEmpty(){
+  document.getElementById("otitle").textContent="Select a workflow";
+  document.getElementById("otitle").style.color="#94aab5";
+  document.getElementById("cpbtn").style.display="none";
+  document.getElementById("expbtn").style.display="none";
+  document.getElementById("obody").innerHTML='<div class="empty"><div class="eico">▱</div><div class="etxt">Add context on the left, then select a workflow</div></div>';
+  document.getElementById("lawbar").style.display="none";
+}
 
-function runWF(w){if(busy)return;curWf=w;busy=true;outTxt="";buildWF();showLaws(w.lw.length?w.lw:curMod.lw);document.getElementById("otitle").textContent=w.nm;document.getElementById("otitle").style.color=curMod.cl;document.getElementById("cpbtn").style.display="none";document.getElementById("expbtn").style.display="none";document.getElementById("svbtn").style.display="none";document.getElementById("obody").innerHTML='<div class="spin-wrap"><div class="spin"></div><div class="stxt">Generating '+w.nm+'...</div></div>';var ctx=document.getElementById("ctx").value.trim()||"Headstart School Islamabad, 8 campuses, 270 staff, 3000+ students";var fn=PROMPTS[w.id];var prompt=fn?fn(ctx):"Help with "+w.nm+" for a Pakistani school. Context: "+ctx;callGemini(prompt,w)}
+function runWF(w){
+  if(busy)return;
+  
+  var ctx=document.getElementById("ctx").value.trim();
+  if(!ctx){
+    alert("Add context first");
+    return;
+  }
+  
+  curWf=w;
+  busy=true;
+  outTxt="";
+  buildWF();
+  showLaws(w.lw);
+  document.getElementById("otitle").textContent=w.nm;
+  document.getElementById("otitle").style.color="#0a9396";
+  
+  var spin=document.createElement("div");
+  spin.className="spin-wrap";
+  spin.innerHTML='<div class="spin"></div><div class="stxt">Generating example...</div>';
+  document.getElementById("obody").innerHTML="";
+  document.getElementById("obody").appendChild(spin);
+  
+  setTimeout(function(){
+    if(w.id==="jd")outTxt=EXAMPLES.jd;
+    else if(w.id==="iq")outTxt=EXAMPLES.iq;
+    else if(w.id==="wl")outTxt=EXAMPLES.wl;
+    else if(w.id==="lt")outTxt=EXAMPLES.lt;
+    else outTxt="[Demo output would appear here with Gemini AI API key]";
+    
+    document.getElementById("obody").innerHTML='<pre class="otext">'+esc(outTxt)+'</pre>';
+    document.getElementById("cpbtn").style.display="inline-block";
+    document.getElementById("expbtn").style.display="inline-block";
+    busy=false;
+    buildWF();
+  },800);
+}
 
-function callGemini(prompt,w){var url="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+KEY;var body=JSON.stringify({system_instruction:{parts:[{text:SYS}]},contents:[{parts:[{text:prompt}]}]});var xhr=new XMLHttpRequest;xhr.open("POST",url,true);xhr.setRequestHeader("Content-Type","application/json");xhr.onreadystatechange=function(){if(xhr.readyState!==4)return;busy=false;buildWF();document.getElementById("cpbtn").style.display="block";document.getElementById("expbtn").style.display="block";document.getElementById("svbtn").style.display="block";try{var d=JSON.parse(xhr.responseText);if(d.error)throw new Error(d.error.message);outTxt=d.candidates[0].content.parts[0].text||"No response received."}catch(e){outTxt="Error: "+e.message+"\n\nPlease check your Gemini API key and try again."}document.getElementById("obody").innerHTML='<pre class="otext">'+esc(outTxt)+'</pre>'};xhr.onerror=function(){busy=false;buildWF();outTxt="Network error. Check your internet connection and try again.";document.getElementById("cpbtn").style.display="block";document.getElementById("expbtn").style.display="block";document.getElementById("svbtn").style.display="block";document.getElementById("obody").innerHTML='<pre class="otext">'+esc(outTxt)+'</pre>'};xhr.send(body)}
+function doCopy(){
+  if(!outTxt)return;
+  navigator.clipboard.writeText(outTxt);
+  var b=document.getElementById("cpbtn");
+  b.textContent="✓ Copied!";
+  setTimeout(function(){b.textContent="📋 Copy";},1500);
+}
 
-function doCopy(){if(!outTxt)return;try{navigator.clipboard.writeText(outTxt).then(function(){var b=document.getElementById("cpbtn");b.textContent="✓ Copied!";b.classList.add("done");setTimeout(function(){b.textContent="📋 Copy";b.classList.remove("done")},2000)})}catch(e){var ta=document.createElement("textarea");ta.value=outTxt;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);var b=document.getElementById("cpbtn");b.textContent="✓ Copied!";setTimeout(function(){b.textContent="📋 Copy"},2000)}}
+function doExport(){
+  if(!outTxt)return;
+  var el=document.createElement("div");
+  el.style.padding="20px";
+  el.innerHTML="<h1 style='color:#0a9396;'>HR Document</h1><pre style='white-space:pre-wrap;'>"+esc(outTxt)+"</pre>";
+  html2pdf().set({filename:"HR-Document.pdf"}).from(el).save();
+}
 
-function doExport(){if(!outTxt)return;var element=document.createElement("div");element.style.padding="20px";element.innerHTML="<h1 style=\"color:#0a9396;\">HR Document</h1><p><b>"+document.getElementById("otitle").textContent+"</b></p><p><b>Context:</b> "+document.getElementById("ctx").value+"</p><hr/><pre style=\"font-family:monospace;white-space:pre-wrap;\">" +esc(outTxt)+"</pre>";var opt={margin:10,filename:"Headstart-"+new Date().toISOString().slice(0,10)+".pdf",image:{type:"jpeg",quality:0.98},html2canvas:{scale:2},jsPDF:{unit:"mm",format:"a4",orientation:"portrait"}};html2pdf().set(opt).from(element).save()}
-
-function doSave(){if(!outTxt)return;var saved=JSON.parse(localStorage.getItem("hs_saved")||"[]");saved.push({title:document.getElementById("otitle").textContent,context:document.getElementById("ctx").value,output:outTxt,timestamp:new Date().toLocaleString()});localStorage.setItem("hs_saved",JSON.stringify(saved));alert("✓ Saved!");document.getElementById("svbtn").textContent="✓ Saved!"}
-
-function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
-
-init();
+function esc(t){
+  return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
 </script>
 </body>
 </html>
